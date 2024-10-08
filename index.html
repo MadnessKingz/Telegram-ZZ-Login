@@ -1,78 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login with Telegram</title>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Telegram Login</title>
+     <style>
+         body {
+             display: flex; 
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+             margin: 0;
+              background-color: #f1f1f1;
+        }
+        .telegram-box {
+            width: 80%;
+            max-width: 400px;
+            background-color: #0088cc;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+       }
+
+       h1, h2, h3 {
+           font-family: 'Arial', sans-serif;
+           margin: 0;
+       }
+
+    .custom-image {
+        width: 100px;
+        margin-top: 40px;
+    }
+
+    .telegram-widget {
+        margin-top: 40px;
+    }
+
+</style>
 </head>
 <body>
-    <h1>Login with Telegram</h1>
+<div class="telegram-box">
 
-    <!-- Telegram Login Widget -->
-    <script async src="https://telegram.org/js/telegram-widget.js?19" 
-            data-telegram-login="KeyshiBrosBot" 
-            data-size="large" 
-            data-auth-url="" 
-            data-request-access="write"
-            data-userpic="false"
-            data-lang="en"
-            data-radius="5"
-            data-onauth="onTelegramAuth(user)">
+<h1>Telegram Login</h1>
+
+<img src="https://i.ibb.co/VqSnP8s/ZigZag.png" alt="Icono de Telegram" class="custom-image">
+
+<h2>Block Puzzle</h2>
+
+    <h3>Acceder:</h3>
+    <script async src="https://telegram.org/js/telegram-widget.js?19"
+        data-telegram-login="ZigZagGamePuzz_bot"
+        data-size="large"
+        data-auth-url=""
+        data-request-access="write"
+        data-onauth="onTelegramAuth(user)"
+        class="telegram-widget">
     </script>
+</div>
 
-    <script type="text/javascript">
-        function onTelegramAuth(user) {
-            console.log('User authenticated:', user);
-            alert('Hello ' + user.first_name + '! Your ID is ' + user.id);
+<script type="text/javascript">
+    function onTelegramAuth(user) {
+        console.log('User authenticated:', user);
+        alert('Hello ' + user.first_name + '! Your ID is ' + user.id);
 
-            // Now you can use the user data to make requests to your API
-            const requestBody = {
-                id: user.id.toString(),
-                authDate: user.auth_date.toString(),
-                username: user.username,
-                hash: user.hash
-            };
+        // Now you can use the user data to make requests to your API
+        const requestBody = {
+            id: user.id,
+            FirstName: user.first_name,
+            LastName: user.last_name,
+            Username: user.username,
+            PhotoUrl: user.photo_url,
+            AuthDate: user.auth_date,
+            hash: user.hash
+        };
 
-            console.log(JSON.stringify(requestBody));
+        console.log(JSON.stringify(requestBody));
 
-            // Example POST request to fetch the token from your API
-            fetch('https://fusyz23.web.core.windows.net/api/auth/telegram-login/KeyshiBrosBot', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Token received:', data.token);
+        // Example POST request to fetch the token from your API
+        fetch('https://fusyverse-dmf3hxccahcgeca2.centralus-01.azurewebsites.net/api/auth/telegram-login/ZigZagGamePuzz_bot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Token received:', data.token);
 
-                // Now you can use the token to call the progress categories endpoint
-                fetchProgressCategories(data.token);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                // Handle error response from API
-            });
-        }
+            // Redirect to another page after successful authentication
+            window.location.href = 'https://keyshibot.z19.web.core.windows.net/';
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle error response from API
+        });
+    }
 
-        function fetchProgressCategories(token) {
-            fetch('https://fusyz23.web.core.windows.net/api/projects/KeyshiBrosBot/progress-categories/telegram', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Progress Categories:', data);
-                // Display or process the categories data as needed
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                // Handle error response from API
-            });
-        }
-    </script>
+    function fetchProgressCategories(token) {
+        fetch('https://fusyverse-dmf3hxccahcgeca2.centralus-01.azurewebsites.net/api/projects/ZigZagGamePuzz_bot/progress-categories/telegram', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Progress Categories:', data);
+            // Display or process the categories data as needed
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle error response from API
+        });
+    }
+</script>
 </body>
+
 </html>
+
