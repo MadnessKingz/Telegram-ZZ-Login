@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Telegram</title>
+</head>
+<body>
+    <h1>Login with Telegram</h1>
+
+    <!-- Telegram Login Widget -->
+    <script async src="https://telegram.org/js/telegram-widget.js?19" 
+            data-telegram-login="KeyshiBrosBot" 
+            data-size="large" 
+            data-auth-url="" 
+            data-request-access="write"
+            data-userpic="false"
+            data-lang="en"
+            data-radius="5"
+            data-onauth="onTelegramAuth(user)">
+    </script>
+
+    <script type="text/javascript">
+        function onTelegramAuth(user) {
+            console.log('User authenticated:', user);
+            alert('Hello ' + user.first_name + '! Your ID is ' + user.id);
+
+            // Now you can use the user data to make requests to your API
+            const requestBody = {
+                id: user.id.toString(),
+                authDate: user.auth_date.toString(),
+                username: user.username,
+                hash: user.hash
+            };
+
+            console.log(JSON.stringify(requestBody));
+
+            // Example POST request to fetch the token from your API
+            fetch('https://fusyz23.web.core.windows.net/api/auth/telegram-login/KeyshiBrosBot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Token received:', data.token);
+
+                // Now you can use the token to call the progress categories endpoint
+                fetchProgressCategories(data.token);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Handle error response from API
+            });
+        }
+
+        function fetchProgressCategories(token) {
+            fetch('https://fusyz23.web.core.windows.net/api/projects/KeyshiBrosBot/progress-categories/telegram', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Progress Categories:', data);
+                // Display or process the categories data as needed
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Handle error response from API
+            });
+        }
+    </script>
+</body>
+</html>
